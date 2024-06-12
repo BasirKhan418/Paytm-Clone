@@ -23,6 +23,9 @@ router.get("/",async(req,res)=>{
         res.status(400).json({status:false,message:"Some thing went wrong try agin after some time "+err})
     }
 })
+router.get("/me",AuthMiddleware,async(req,res)=>{
+res.status(200).json({status:true,user:req.user})
+});
 router.post("/signup",async(req,res)=>{
     const zodSchema = zod.object({
         name:zod.string(),
@@ -51,7 +54,7 @@ router.post("/signup",async(req,res)=>{
         userid:a._id,
         balance:Math.floor(Math.random()*10000)
     })
-    let token = jwt.sign({email:data.email,name:data.name},JWT_SECRET);
+    let token = jwt.sign({email:data.email,name:data.name,id:data._id},JWT_SECRET);
     res.status(200).json({status:true,message:"User created successfully",token:token});
     }
     catch(err){
@@ -78,7 +81,7 @@ if(dpass!==req.body.password){
     return res.status(400).json({status:false,message:"Invalid password"})
 }
 else{
-    let token = jwt.sign({email:user.email,name:user.name},JWT_SECRET);
+    let token = jwt.sign({email:user.email,name:user.name,id:user._id},JWT_SECRET);
     res.status(200).json({status:true,message:"User logged in successfully",token:token});
 }
 }

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://thebasirkhanofficial:754293@prapp.nypjwvu.mongodb.net/Paytm');
+mongoose.connect('USE yOUR OWN');
 const UserSchema = mongoose.Schema({
     name:{type:String,required:true},
     email:{type:String,required:true},

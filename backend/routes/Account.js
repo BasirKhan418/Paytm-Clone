@@ -4,8 +4,7 @@ const { default: mongoose } = require("mongoose");
 const router = express.Router();
 router.get("/balance", async (req, res) => {
   try {
-    
-    let a = await Account.findOne({ userid: req.body.id });
+    let a = await Account.findOne({ userid: req.user.id });
     if (a) {
       res.status(200).json({ status: true, balance: a.balance });
     } else {
@@ -29,7 +28,7 @@ router.post("/transfer", async (req, res) => {
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
-    let acdata = await Account.findOne({ userid: req.body.from }).session(
+    let acdata = await Account.findOne({ userid: req.user.id }).session(
       session
     );
     console.log(req.body);
@@ -53,7 +52,7 @@ router.post("/transfer", async (req, res) => {
         });
     }
     await Account.updateOne(
-      { userid: req.body.from },
+      { userid: req.user.id },
       { $inc: { balance: -req.body.amount } }
     ).session(session);
     await Account.updateOne(
